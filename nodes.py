@@ -82,7 +82,13 @@ def train_test_and_evaluate_model(ML_lib: str, package_name: str | None, algorit
     acc = model.evaluate(X_test, y_test)
 
     y_pred = model.predict(X_test)
-    conf_matrix = confusion_matrix(y_pred, y_pred)
+
+    if len(y_pred.shape) == 1:
+        y_pred = y_pred.reshape(-1, 1)
+    if len(y_test.shape) == 1:
+        y_test = y_test.reshape(-1, 1)
+
+    conf_matrix = confusion_matrix(y_test, y_pred)
 
     cross_val = cross_val_score(model, X, y, cv=cv_split)
 
